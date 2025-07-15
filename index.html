@@ -1,0 +1,1727 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sustenta Pitanga</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- jsPDF para geração de PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Chart.js para gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Variáveis CSS para cores, facilitando a alternância entre modos claro/escuro */
+        :root {
+            --bg-color: #f0f4f8;
+            --text-color: #333; /* Cor do texto padrão para o modo claro */
+            --card-bg: #ffffff;
+            --card-shadow: rgba(0, 0, 0, 0.1);
+            --header-bg-start: #3b82f6; /* blue-500 */
+            --header-bg-end: #10b981; /* green-500 */
+            --primary-btn-bg: #3b82f6;
+            --primary-btn-hover: #2563eb;
+            --secondary-btn-bg: #10b981;
+            --secondary-btn-hover: #059669;
+            --danger-btn-bg: #ef4444;
+            --danger-btn-hover: #dc2626;
+            --progress-bar-container: #e2e8f0;
+            --chart-btn-bg: #a7f3d0;
+            --chart-btn-text: #065f46;
+            --chart-btn-border: #34d399;
+            --chart-btn-hover: #6ee7b7;
+            --chart-btn-active-bg: #10b981;
+            --chart-btn-active-text: white;
+            --chart-btn-active-border: #059669;
+            --popup-bg: white;
+            --popup-text: #333;
+            --message-box-info-bg: #bfdbfe;
+            --message-box-info-border: #60a5fa;
+            --message-box-info-text: #1e40af;
+            --message-box-success-bg: #d1fae5;
+            --message-box-success-border: #34d399;
+            --message-box-success-text: #065f46;
+            --message-box-error-bg: #fee2e2;
+            --message-box-error-border: #ef4444;
+            --message-box-error-text: #991b1b;
+            --input-bg: #ffffff;
+            --input-text: #333;
+            --input-border: #d1d5db;
+            --link-color: #3b82f6;
+            --link-hover: #2563eb;
+            --mobile-menu-bg: #ffffff;
+            --mobile-menu-border: #e2e8f0;
+            --mobile-menu-link-text: #2d3748;
+            --mobile-menu-link-hover: #edf2f7;
+            --footer-bg: #1a202c; /* gray-800 */
+            --footer-text: #ffffff;
+            /* Cores para adaptação de texto e fundos específicos */
+            --text-gray-700-color: #4a5568;
+            --text-gray-600-color: #718096;
+            --text-gray-800-color: #2d3748;
+            --text-gray-900-color: #1a202c;
+            --green-700-color: #2f855a;
+            --blue-600-color: #3182ce;
+            --green-600-color: #38a169;
+            --yellow-600-color: #d69e2e;
+            --purple-500-color: #805ad5;
+            --red-600-color: #e53e3e;
+            --orange-600-color: #dd6b20;
+            --blue-50-bg: #ebf8ff;
+            --green-50-bg: #f0fff4;
+            --yellow-50-bg: #fffff0;
+            --blue-800-color: #2a4365;
+            --indigo-500-color: #667eea;
+            --border-gray-200-color: #edf2f7;
+        }
+
+        /* Modo Escuro */
+        body.dark-mode {
+            --bg-color: #1a202c;
+            --text-color: #e2e8f0; /* Cor do texto padrão para o modo escuro (claro) */
+            --card-bg: #2d3748;
+            --card-shadow: rgba(0, 0, 0, 0.3);
+            --header-bg-start: #4a5568; /* gray-700 */
+            --header-bg-end: #2d3748; /* gray-800 */
+            --primary-btn-bg: #63b3ed;
+            --primary-btn-hover: #4299e1;
+            --secondary-btn-bg: #48bb78;
+            --secondary-btn-hover: #38a169;
+            --danger-btn-bg: #fc8181;
+            --danger-btn-hover: #e53e3e;
+            --progress-bar-container: #4a5568;
+            --chart-btn-bg: #4a5568;
+            --chart-btn-text: #e2e8f0;
+            --chart-btn-border: #616e7f;
+            --chart-btn-hover: #616e7f;
+            --chart-btn-active-bg: #48bb78;
+            --chart-btn-active-text: white;
+            --chart-btn-active-border: #38a169;
+            --popup-bg: #2d3748;
+            --popup-text: #e2e8f0;
+            --message-box-info-bg: #2b6cb0;
+            --message-box-info-border: #4299e1;
+            --message-box-info-text: #e0e0e0;
+            --message-box-success-bg: #2f855a;
+            --message-box-success-border: #48bb78;
+            --message-box-success-text: #e0e0e0;
+            --message-box-error-bg: #c53030;
+            --message-box-error-border: #e53e3e;
+            --message-box-error-text: #e0e0e0;
+            --input-bg: #4a5568;
+            --input-text: #e2e8f0;
+            --input-border: #616e7f;
+            --link-color: #63b3ed;
+            --link-hover: #4299e1;
+            --mobile-menu-bg: #2d3748;
+            --mobile-menu-border: #4a5568;
+            --mobile-menu-link-text: #e2e8f0;
+            --mobile-menu-link-hover: #4a5568;
+            --footer-bg: #1a202c;
+            --footer-text: #ffffff;
+            /* Cores para adaptação de texto e fundos específicos no modo escuro */
+            --text-gray-700-color: #a0aec0;
+            --text-gray-600-color: #a0aec0;
+            --text-gray-800-color: #e2e8f0;
+            --text-gray-900-color: #e2e8f0;
+            --green-700-color: #68d391;
+            --blue-600-color: #63b3ed;
+            --green-600-color: #68d391;
+            --yellow-600-color: #f6e05e;
+            --purple-500-color: #b794f4;
+            --red-600-color: #fc8181;
+            --orange-600-color: #f6ad55;
+            --blue-50-bg: #2a4365;
+            --green-50-bg: #2d3748;
+            --yellow-50-bg: #2d3748;
+            --blue-800-color: #90cdf4;
+            --indigo-500-color: #9f7aea;
+            --border-gray-200-color: #4a5568;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color); /* Usa a variável de cor de texto padrão */
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 0.75rem; /* Cantos arredondados */
+            box-shadow: 0 4px 12px var(--card-shadow); /* Sombra mais suave */
+            padding: 1.5rem;
+            transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+            color: var(--text-color); /* Garante que o texto dentro do card seja adaptável */
+        }
+        .btn-primary {
+            background-color: var(--primary-btn-bg);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary:hover {
+            background-color: var(--primary-btn-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        .btn-secondary {
+            background-color: var(--secondary-btn-bg);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .btn-secondary:hover {
+            background-color: var(--secondary-btn-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        .btn-danger { /* Novo estilo para botão de sair */
+            background-color: var(--danger-btn-bg);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .btn-danger:hover {
+            background-color: var(--danger-btn-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        .progress-bar-container {
+            background-color: var(--progress-bar-container);
+            border-radius: 0.5rem;
+            height: 1.5rem;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            border-radius: 0.5rem;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: width 0.5s ease-in-out; /* Animação da barra de progresso */
+        }
+        .progress-red { background-color: #ef4444; } /* Vermelho para desperdício alto */
+        .progress-orange { background-color: #f97316; } /* Laranja para alerta */
+        .progress-green { background-color: #22c55e; } /* Verde para bom desempenho */
+
+        /* Estilo para botões de tipo de gráfico */
+        .chart-type-btn {
+            @apply px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200;
+            background-color: var(--chart-btn-bg);
+            color: var(--chart-btn-text);
+            border: 1px solid var(--chart-btn-border);
+        }
+        .chart-type-btn:hover {
+            background-color: var(--chart-btn-hover);
+        }
+        .chart-type-btn.active {
+            background-color: var(--chart-btn-active-bg);
+            color: var(--chart-btn-active-text);
+            border-color: var(--chart-btn-active-border);
+        }
+
+        /* Estilos para o pop-up de localização */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* Fundo mais escuro */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .popup-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .popup-content {
+            background-color: var(--popup-bg);
+            color: var(--popup-text);
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3); /* Sombra mais proeminente */
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            transform: translateY(-20px);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .popup-overlay.visible .popup-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .popup-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+        .popup-buttons button {
+            @apply px-4 py-2 rounded-md text-base font-medium;
+            transition: background-color 0.3s ease;
+        }
+        .popup-buttons .btn-allow-always {
+            @apply bg-blue-500 text-white hover:bg-blue-600;
+        }
+        .popup-buttons .btn-allow-once {
+            @apply bg-green-500 text-white hover:bg-green-600;
+        }
+        .popup-buttons .btn-deny {
+            @apply bg-gray-300 text-gray-800 hover:bg-gray-400;
+        }
+
+        /* Estilo para mensagens de erro/sucesso */
+        .message-box {
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.375rem;
+            margin-top: 1rem;
+            text-align: center;
+            font-size: 0.9rem;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .message-box.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .message-box.success {
+            background-color: var(--message-box-success-bg);
+            border-color: var(--message-box-success-border);
+            color: var(--message-box-success-text);
+        }
+        .message-box.error {
+            background-color: var(--message-box-error-bg);
+            border-color: var(--message-box-error-border);
+            color: var(--message-box-error-text);
+        }
+        .message-box.info {
+            background-color: var(--message-box-info-bg);
+            border-color: var(--message-box-info-border);
+            color: var(--message-box-info-text);
+        }
+        
+        /* Ajustes para elementos de formulário no modo escuro */
+        body.dark-mode input,
+        body.dark-mode select,
+        body.dark-mode textarea {
+            background-color: var(--input-bg);
+            color: var(--input-text);
+            border-color: var(--input-border);
+        }
+        body.dark-mode input::placeholder,
+        body.dark-mode textarea::placeholder {
+            color: #a0aec0;
+        }
+        
+        /* Links para seções */
+        .nav-link {
+            cursor: pointer;
+            @apply px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200;
+            color: var(--mobile-menu-link-text); /* Links do menu mobile adaptam ao tema */
+        }
+        .nav-link:hover {
+            background-color: var(--mobile-menu-link-hover);
+        }
+        .nav-link.active {
+            background-color: var(--mobile-menu-link-hover);
+        }
+
+        /* Toggle de modo escuro no perfil */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 28px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+        input:checked + .slider:before {
+            -webkit-transform: translateX(22px);
+            -ms-transform: translateX(22px);
+            transform: translateX(22px);
+        }
+        /* Round sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+        /* Estilo para o botão de modo escuro no header */
+        #headerDarkModeToggle {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: white; /* Sempre branco no cabeçalho */
+            transition: color 0.3s ease;
+            margin-left: 1rem; /* Espaçamento do botão de modo escuro no header */
+        }
+        #headerDarkModeToggle:hover {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Cores de texto adaptáveis ao tema */
+        /* Removidas as classes específicas para garantir que 'color: var(--text-color)' seja o dominante */
+        /* As classes Tailwind como text-gray-700 ainda podem ser usadas para nuances, mas a variável principal controlará o contraste */
+
+        /* Cores de fundo adaptáveis ao tema */
+        .bg-blue-50 { background-color: var(--blue-50-bg); }
+        .bg-green-50 { background-color: var(--green-50-bg); }
+        .bg-yellow-50 { background-color: var(--yellow-50-bg); }
+        .border-gray-200 { border-color: var(--border-gray-200-color); }
+
+        /* Ajustes para o menu mobile no modo escuro */
+        #mobileMenu {
+            border-color: var(--mobile-menu-border);
+            background-color: var(--mobile-menu-bg);
+            /* Transições para o menu mobile */
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+            transform: translateX(100%); /* Começa fora da tela */
+            opacity: 0;
+            pointer-events: none; /* Impede cliques quando invisível */
+        }
+
+        #mobileMenu.active {
+            transform: translateX(0); /* Desliza para a tela */
+            opacity: 1;
+            pointer-events: auto; /* Permite cliques */
+        }
+
+        /* Esconder a navegação desktop */
+        .header-nav-desktop {
+            display: none;
+        }
+
+        /* Animação para os resultados da calculadora de impacto */
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .impact-results-visible {
+            animation: fadeInScale 0.5s ease-out forwards;
+        }
+
+        /* Estilos para a aba de resultados da calculadora no modo escuro */
+        body.dark-mode #impactResults {
+            background-color: var(--card-bg); /* Fundo do card escuro */
+            color: var(--text-color); /* Torna o texto dos parágrafos claro */
+        }
+
+        body.dark-mode #impactResults h4 {
+            color: var(--blue-800-color); /* Torna o título h4 claro (azul claro) */
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <header class="bg-gradient-to-r from-blue-500 to-green-500 text-white p-4 shadow-lg rounded-b-xl"
+            style="background-image: linear-gradient(to right, var(--header-bg-start), var(--header-bg-end));">
+        <div class="container flex justify-between items-center">
+            <div class="flex items-center">
+                <!-- Usando a imagem ccm.png que você enviou -->
+                <img src="ccm.png" alt="Logo CCM" class="h-12 w-12 mr-3 rounded-full shadow-md">
+                <h1 class="text-3xl font-bold">Sustenta Pitanga</h1>
+            </div>
+            
+            <!-- Botão de modo escuro e menu hambúrguer para todas as telas -->
+            <div id="logged-in-controls" class="flex items-center space-x-4 hidden">
+                <button id="headerDarkModeToggle" aria-label="Alternar modo escuro">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button id="notificationsBtn" class="p-2 rounded-full hover:bg-white hover:bg-opacity-20 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                    </svg>
+                    <!-- O elemento com a notificação vermelha foi removido daqui -->
+                </button>
+                <button id="menuToggle" class="text-2xl text-white">
+                    <i class="fas fa-bars"></i> <!-- Ícone de hambúrguer -->
+                </button>
+            </div>
+            
+            <!-- Menu Mobile (agora serve como menu principal para todas as telas) -->
+            <div id="mobileMenu" class="fixed inset-y-0 right-0 w-64 bg-white shadow-lg p-4 z-50 flex flex-col">
+                <div class="flex justify-end mb-4">
+                    <button id="closeMenu" class="text-gray-600 text-2xl hover:text-gray-800">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <ul class="space-y-4 flex-grow">
+                    <li><a class="nav-link block p-2 rounded-md hover:bg-gray-100" data-target="dashboard">Dashboard</a></li>
+                    <li><a class="nav-link block p-2 rounded-md hover:bg-gray-100" data-target="reports">Relatórios</a></li>
+                    <li><a class="nav-link block p-2 rounded-md hover:bg-gray-100" data-target="profile">Perfil</a></li>
+                </ul>
+            </div>
+
+            <!-- Notificações Dropdown (agora dentro do logged-in-controls) -->
+            <div id="notificationsDropdown" class="hidden absolute right-4 top-16 mt-2 w-72 bg-white rounded-md shadow-lg z-10 transition-all duration-300 ease-in-out transform scale-95 opacity-0">
+                <div class="p-4 border-b border-gray-200">
+                    <h4 class="font-bold text-gray-800">Notificações</h4>
+                </div>
+                <div class="max-h-60 overflow-y-auto">
+                    <a href="#" class="block px-4 py-3 hover:bg-gray-100 border-b border-gray-100">
+                        <p class="text-sm font-medium text-gray-900">Alerta de Chuva</p>
+                        <p class="text-xs text-gray-500">Prevista chuva forte amanhã - evite irrigação</p>
+                    </a>
+                    <a href="#" class="block px-4 py-3 hover:bg-gray-100 border-b border-gray-100">
+                        <p class="text-sm font-medium text-gray-900">Relatório Mensal</p>
+                        <p class="text-xs text-gray-500">Seu relatório de junho está disponível</p>
+                    </a>
+                    <a href="#" class="block px-4 py-3 hover:bg-gray-100">
+                        <p class="text-sm font-medium text-gray-900">Atualização do Sistema</p>
+                        <p class="text-xs text-gray-500">Nova versão disponível com melhorias</p>
+                    </a>
+                </div>
+                <div class="p-2 bg-gray-50 text-center rounded-b-md">
+                    <a href="#" class="text-sm text-blue-600 hover:underline">Ver todas</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow container mt-8">
+        <!-- Seção Sobre o Projeto -->
+        <section id="about" class="card max-w-4xl mx-auto mb-8">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold text-green-700 mb-4">Sobre o Sustenta Pitanga</h2>
+                <p class="text-lg text-gray-700 mb-6">Uma plataforma inovadora para monitoramento agrícola sustentável, desenvolvida pelo CCM Dom Pedro.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+                        <svg class="w-12 h-12 mx-auto mb-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                        <h3 class="text-xl font-semibold mb-2 text-gray-800">Monitoramento em Tempo Real</h3>
+                        <p class="text-gray-600">Acompanhe indicadores de sustentabilidade da sua propriedade.</p>
+                    </div>
+                    
+                    <div class="bg-green-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+                        <svg class="w-12 h-12 mx-auto mb-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                        </svg>
+                        <h3 class="text-xl font-semibold mb-2 text-gray-800">Alertas Inteligentes</h3>
+                        <p class="text-gray-600">Receba recomendações para melhorar sua produção.</p>
+                    </div>
+                    
+                    <div class="bg-yellow-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+                        <svg class="w-12 h-12 mx-auto mb-3 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                        </svg>
+                        <h3 class="text-xl font-semibold mb-2 text-gray-800">Sensores Caseiros</h3>
+                        <p class="text-gray-600">Integração com dispositivos IoT para coleta de dados.</p>
+                    </div>
+                </div>
+                
+                <button id="goToLoginBtn" class="btn-primary">Acessar Plataforma</button>
+            </div>
+        </section>
+
+        <!-- Seção de Login -->
+        <section id="login" class="hidden">
+            <div class="card max-w-md mx-auto">
+                <h2 class="text-2xl font-semibold mb-6 text-center">Acesse sua Conta</h2>
+                <form id="loginForm">
+                    <div class="mb-4">
+                        <label for="email" class="block text-sm font-bold mb-2">E-mail:</label>
+                        <input type="email" id="email" name="email" class="shadow appearance-none border rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-400" placeholder="seuemail@exemplo.com" required>
+                    </div>
+                    <div class="mb-6">
+                        <label for="password" class="block text-sm font-bold mb-2">Senha:</label>
+                        <input type="password" id="password" name="password" class="shadow appearance-none border rounded-lg w-full py-2 px-3 mb-3 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-400" placeholder="********" required>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <button type="submit" class="btn-primary w-full">Entrar</button>
+                    </div>
+                    <p class="text-center text-sm mt-4">Não tem uma conta? <a href="#" id="registerLink" class="text-blue-500 hover:underline">Cadastre-se aqui</a></p>
+                    <div id="loginMessage" class="message-box hidden"></div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Seção de Cadastro -->
+        <section id="register" class="hidden">
+            <div class="card max-w-md mx-auto">
+                <h2 class="text-2xl font-semibold mb-6 text-center">Crie sua Conta</h2>
+                <form id="registerForm">
+                    <div class="mb-4">
+                        <label for="registerName" class="block text-sm font-bold mb-2">Nome Completo:</label>
+                        <input type="text" id="registerName" name="registerName" class="shadow appearance-none border rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-400" placeholder="Seu nome" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="registerEmail" class="block text-sm font-bold mb-2">E-mail:</label>
+                        <input type="email" id="registerEmail" name="registerEmail" class="shadow appearance-none border rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-400" placeholder="seuemail@exemplo.com" required>
+                    </div>
+                    <div class="mb-6">
+                        <label for="registerPassword" class="block text-sm font-bold mb-2">Senha:</label>
+                        <input type="password" id="registerPassword" name="registerPassword" class="shadow appearance-none border rounded-lg w-full py-2 px-3 mb-3 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-400" placeholder="********" required>
+                    </div>
+                    <div class="mb-6">
+                        <label for="confirmPassword" class="block text-sm font-bold mb-2">Confirmar Senha:</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" class="shadow appearance-none border rounded-lg w-full py-2 px-3 mb-3 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-400" placeholder="********" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="registerCooperative" class="block text-sm font-bold mb-2">Cooperativa:</label>
+                        <input type="text" id="registerCooperative" name="registerCooperative" class="shadow appearance-none border rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-400" placeholder="Nome da sua cooperativa (opcional)">
+                    </div>
+                    <div class="mb-6">
+                        <label for="registerFarmData" class="block text-sm font-bold mb-2">Dados da Fazenda:</label>
+                        <textarea id="registerFarmData" name="registerFarmData" rows="3" class="shadow appearance-none border rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-400" placeholder="Nome da fazenda, área, culturas principais (opcional)"></textarea>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <button type="submit" class="btn-primary w-full">Cadastrar</button>
+                    </div>
+                    <p class="text-center text-sm mt-4">Já tem uma conta? <a href="#" id="backToLoginLink" class="text-blue-500 hover:underline">Faça login aqui</a></p>
+                    <div id="registerMessage" class="message-box hidden"></div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Dashboard -->
+        <section id="dashboard" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Mensagem de Boas-Vindas -->
+            <div class="lg:col-span-3 card text-center">
+                <h2 id="welcomeMessageDisplay" class="text-2xl font-bold text-green-700 mb-4"></h2>
+            </div>
+            
+            <!-- Card de Desperdício por Hectare -->
+            <div class="card">
+                <h3 class="text-xl font-semibold mb-4 flex items-center">
+                    <i class="fas fa-trash-alt mr-2 text-red-500"></i>
+                    Desperdício por Hectare
+                </h3>
+                <p class="text-4xl font-bold text-red-600 mb-4">15%</p>
+                <div class="progress-bar-container">
+                    <div class="progress-bar progress-red" style="width: 75%;">75% da meta</div>
+                </div>
+                <p class="text-sm mt-2">Meta: 5% de desperdício. <span class="font-semibold">Ação necessária!</span></p>
+            </div>
+
+            <!-- Card de Adubos Utilizados -->
+            <div class="card">
+                <h3 class="text-xl font-semibold mb-4 flex items-center">
+                    <i class="fas fa-leaf mr-2 text-green-500"></i>
+                    Adubos Utilizados
+                </h3>
+                <p class="text-4xl font-bold text-green-600 mb-4">800 kg/ha</p>
+                <div class="progress-bar-container">
+                    <div class="progress-bar progress-green" style="width: 80%;">80% do recomendado</div>
+                </div>
+                <p class="text-sm mt-2">Recomendado: 1000 kg/ha. <span class="font-semibold">Bom uso!</span></p>
+            </div>
+
+            <!-- Card de Clima Atual -->
+            <div class="card">
+                <h3 class="text-xl font-semibold mb-4 flex items-center">
+                    <i class="fas fa-cloud-sun mr-2 text-blue-500"></i>
+                    Clima Atual
+                </h3>
+                <div id="weatherInfo">
+                    <p class="text-lg">Carregando clima...</p>
+                </div>
+            </div>
+
+            <!-- Card de Calculadora de Impacto -->
+            <div class="card">
+                <h3 class="text-xl font-semibold mb-4 flex items-center">
+                    <i class="fas fa-calculator mr-2 text-purple-500"></i>
+                    Calculadora de Impacto
+                </h3>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-bold mb-2">Área Cultivada (hectares)</label>
+                        <!-- Adicionado min="0" para evitar números negativos -->
+                        <input type="number" id="cultivatedArea" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" value="10" min="0">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold mb-2">Tipo de Cultura</label>
+                        <select id="cropType" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            <option value="feijao">Feijão</option>
+                            <option value="arroz">Arroz</option>
+                            <option value="cana">Cana-de-Açúcar</option>
+                            <option value="outro">Outro</option>
+                        </select>
+                    </div>
+                    <!-- Texto do botão alterado para "Calcular Resultados" -->
+                    <button id="calculateImpactBtn" class="btn-primary w-full">Calcular Resultados</button>
+                    <!-- Mensagem específica para a calculadora de impacto -->
+                    <div id="impactCalcMessage" class="message-box hidden"></div>
+                    <div id="impactResults" class="p-4 bg-blue-50 rounded-lg">
+                        <h4 class="font-bold text-blue-800 mb-2">Resultados:</h4>
+                        <p class="text-sm">Hectares afetados: <span id="affectedHectares" class="font-bold">0</span> ha</p>
+                        <p class="text-sm">Economia de água: <span id="waterSaved" class="font-bold">0</span> litros/ano</p>
+                        <p class="text-sm">Redução de desperdício: <span id="wasteReduction" class="font-bold">0</span>%</p>
+                        <p class="text-sm">Economia financeira: R$ <span id="moneySaved" class="font-bold">0</span>/ano</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card de Alertas Úteis -->
+            <div class="card lg:col-span-2">
+                <h3 class="text-xl font-semibold mb-4 flex items-center">
+                    <i class="fas fa-exclamation-triangle mr-2 text-yellow-500"></i>
+                    Alertas Úteis
+                </h3>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li><span class="font-semibold text-red-600">Alerta:</span> Amanhã: CHUVA FORTE - Não irrigue!</li>
+                    <li><span class="font-semibold text-orange-600">Recomendação:</span> Reduza a irrigação de água em 4 litros por hectare.</li>
+                    <li><span class="font-semibold text-green-600">Notificação:</span> Sensoriamento detectou melhora na qualidade do solo. +10 pontos!</li>
+                </ul>
+            </div>
+
+            <!-- Card de Dicas de Sustentabilidade -->
+            <div class="card">
+                <h3 class="text-xl font-semibold mb-4 flex items-center">
+                    <i class="fas fa-lightbulb mr-2 text-purple-500"></i>
+                    Dicas de Sustentabilidade
+                </h3>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li>Considere a rotação de culturas para melhorar a saúde do solo.</li>
+                    <li>Utilize sistemas de irrigação por gotejamento para otimizar o uso da água.</li>
+                    <li>Monitore a saúde das plantas regularmente para identificar problemas precocemente.</li>
+                </ul>
+            </div>
+
+            <!-- Card de Coleta de Dados Interativa -->
+            <div class="card lg:col-span-3">
+                <h3 class="text-xl font-semibold mb-4 flex items-center">
+                    <i class="fas fa-database mr-2 text-indigo-500"></i>
+                    Coleta de Dados
+                </h3>
+                <div class="space-y-6">
+                    <div>
+                        <h4 class="text-lg font-semibold mb-3 flex items-center">
+                            <i class="fas fa-keyboard mr-2 text-blue-500"></i>
+                            Dados Manuais
+                        </h4>
+                        <div class="mb-4">
+                            <label for="dailyWaterInput" class="block text-sm font-bold mb-2">Gasto de Água Diário (litros):</label>
+                            <input type="number" id="dailyWaterInput" class="shadow appearance-none border rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-400" placeholder="Ex: 5000">
+                        </div>
+                        <div class="mb-4">
+                            <label for="fertilizerUseInput" class="block text-sm font-bold mb-2">Uso de Fertilizantes (kg):</label>
+                            <input type="number" id="fertilizerUseInput" class="shadow appearance-none border rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-400" placeholder="Ex: 200">
+                        </div>
+                        <div class="mb-4">
+                            <label for="soilObservationInput" class="block text-sm font-bold mb-2">Observações do Solo:</label>
+                            <textarea id="soilObservationInput" rows="3" class="shadow appearance-none border rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-400" placeholder="Ex: Solo úmido, boa drenagem."></textarea>
+                        </div>
+                        <button id="saveManualDataBtn" class="btn-primary">Salvar Dados Manuais</button>
+                        <p id="manualSaveMessage" class="message-box hidden"></p>
+                    </div>
+
+                    <div class="mt-8">
+                        <h4 class="text-lg font-semibold mb-3 flex items-center">
+                            <i class="fas fa-microchip mr-2 text-green-500"></i>
+                            Sensores Caseiros (Simulado)
+                        </h4>
+                        <p class="mb-4">Simule a leitura de um medidor de água adaptado com Arduino. Em uma aplicação real, esses dados seriam enviados automaticamente.</p>
+                        <div class="mb-4">
+                            <label for="waterMeterInput" class="block text-sm font-bold mb-2">Leitura do Medidor de Água (litros/min):</label>
+                            <input type="number" id="waterMeterInput" class="shadow appearance-none border rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-400" placeholder="Ex: 2.5">
+                        </div>
+                        <button id="simulateSensorDataBtn" class="btn-secondary">Simular Leitura do Sensor</button>
+                        <p id="sensorSaveMessage" class="message-box hidden"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card de Mapa da Propriedade (Movido para o final do Dashboard) -->
+            <div class="card lg:col-span-3">
+                <h3 class="text-xl font-semibold mb-4 flex items-center">
+                    <i class="fas fa-map-marked-alt mr-2 text-blue-500"></i>
+                    Mapa da Propriedade
+                </h3>
+                <div id="farmMap" class="h-64 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden">
+                    <p class="text-gray-500">Carregando mapa...</p>
+                </div>
+                <div class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <button class="btn-secondary">Visualização Satélite</button>
+                    <button class="btn-secondary">Visualização Terreno</button>
+                    <button class="btn-secondary">Medir Área</button>
+                    <button class="btn-secondary">Adicionar Marcador</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Relatórios (Atualizada) -->
+        <section id="reports" class="hidden">
+            <div class="card">
+                <h2 class="text-2xl font-semibold mb-6 text-center">Relatórios Inteligentes</h2>
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3 flex items-center">
+                            <i class="fas fa-chart-bar mr-2 text-blue-500"></i>
+                            Relatório Mensal - Junho 2025
+                        </h3>
+                        <p class="text-lg mb-2">Impacto Econômico: <span class="font-bold text-green-600">Economia de R$ 2.500</span> em fertilizantes.</p>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li>Desperdício médio: 8% (redução de 7% em relação ao mês anterior).</li>
+                            <li>Uso de água: 1200 litros/hectare (dentro da meta).</li>
+                            <li>Qualidade do solo: Melhoria de 15% nos indicadores.</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3 flex items-center">
+                            <i class="fas fa-file-alt mr-2 text-purple-500"></i>
+                            Relatório Personalizado - Uso de Pesticidas (Maio 2025)
+                        </h3>
+                        <p class="text-lg mb-2">Impacto Ambiental: <span class="font-bold text-red-600">Uso acima do recomendado em 10%</span>.</p>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li>Pesticida X: 5% acima do limite seguro.</li>
+                            <li>Recomendação: Avaliar alternativas biológicas para a próxima safra.</li>
+                        </ul>
+                    </div>
+
+                    <div class="mt-8 text-center">
+                        <h3 class="text-xl font-semibold mb-4">Tipo de Gráfico</h3>
+                        <div class="flex flex-wrap justify-center gap-2 mb-6" id="chartTypeButtons">
+                            <button class="chart-type-btn active" data-chart-type="pie">Pizza</button>
+                            <button class="chart-type-btn" data-chart-type="bar-column">Coluna</button>
+                            <button class="chart-type-btn" data-chart-type="line">Linhas</button>
+                            <button class="chart-type-btn" data-chart-type="doughnut">Rosca</button>
+                            <button class="chart-type-btn" data-chart-type="bar-horizontal">Barras</button>
+                            <button class="chart-type-btn" data-chart-type="radar">Radar</button>
+                        </div>
+                    </div>
+
+                    <div class="mt-8">
+                        <h3 class="text-xl font-semibold mb-4 text-center">Desperdício vs. Uso Eficiente (por Hectare)</h3>
+                        <div class="w-full max-w-sm mx-auto">
+                            <canvas id="myChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-8">
+                        <button id="generatePdfReportBtn" class="btn-secondary">Gerar Relatório em PDF</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Perfil -->
+        <section id="profile" class="hidden">
+            <div class="card max-w-2xl mx-auto">
+                <h2 class="text-2xl font-semibold mb-6 text-center">Meu Perfil</h2>
+                <div class="flex flex-col md:flex-row items-center md:items-start gap-8">
+                    <div class="flex-shrink-0">
+                        <img id="profilePicImg" src="https://placehold.co/150x150/a7f3d0/065f46?text=Foto" alt="Foto de Perfil" class="w-36 h-36 rounded-full object-cover border-4 border-green-400 shadow-md">
+                        <input type="file" id="profilePicInput" accept="image/png, image/jpeg, image/jpg" class="hidden">
+                        <button id="changeProfilePicBtn" class="mt-4 w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition-colors">Alterar Foto</button>
+                        <div id="profilePicMessage" class="message-box hidden mt-2"></div>
+                    </div>
+
+                    <div class="flex-grow w-full">
+                        <div class="mb-4">
+                            <label for="profileNameInput" class="block text-sm font-bold mb-2">Nome:</label>
+                            <input type="text" id="profileNameInput" class="shadow appearance-none border rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-400">
+                        </div>
+                        <div class="mb-4">
+                            <label for="profileEmailInput" class="block text-sm font-bold mb-2">E-mail:</label>
+                            <input type="email" id="profileEmailInput" class="shadow appearance-none border rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-400" disabled>
+                        </div>
+                        <div class="mb-4">
+                            <label for="profileCooperativeInput" class="block text-sm font-bold mb-2">Cooperativa:</label>
+                            <input type="text" id="profileCooperativeInput" class="shadow appearance-none border rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-400">
+                        </div>
+                        <div class="mb-4">
+                            <label for="profileFarmDataInput" class="block text-sm font-bold mb-2">Dados da Fazenda:</label>
+                            <textarea id="profileFarmDataInput" rows="4" class="shadow appearance-none border rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-400"></textarea>
+                        </div>
+                        <!-- A seção de Preferências foi removida daqui -->
+                        <div class="text-right mt-6 flex justify-end gap-4">
+                            <button id="saveProfileBtn" class="btn-primary">Salvar Alterações</button>
+                            <button id="logoutBtn" class="btn-danger">Sair da Conta</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Popup de Permissão de Localização -->
+    <div id="locationPermissionPopup" class="popup-overlay hidden">
+        <div class="popup-content">
+            <h3 class="text-xl font-semibold mb-4">Permissão de Localização</h3>
+            <p>Para fornecer dados climáticos precisos e funcionalidades de mapa, o Sustenta Pitanga precisa acessar sua localização.</p>
+            <div class="popup-buttons">
+                <button id="allowLocationBtn" class="btn-primary">Permitir Localização</button>
+                <button id="denyLocationBtn" class="btn-danger">Negar</button>
+            </div>
+            <div id="locationMessage" class="message-box hidden"></div>
+        </div>
+    </div> 
+
+    <footer class="bg-gray-800 text-white p-4 text-center mt-8 rounded-t-xl"
+            style="background-color: var(--footer-bg); color: var(--footer-text);">
+        <div class="container">
+            <p>&copy; 2024 Sustenta Pitanga. Todos os direitos reservados.</p>
+            <!-- Removido o parágrafo "Desenvolvido pelo CCM Dom Pedro." -->
+        </div>
+    </footer>
+    
+    <script>
+        // Variáveis globais para simular dados do usuário e estado de login
+        let currentUser = null;
+        const users = JSON.parse(localStorage.getItem('users')) || {};
+        let loggedInUserEmail = localStorage.getItem('loggedInUserEmail'); // Usar let para poder reatribuir
+        
+        // Instâncias de gráficos
+        let myChartInstance = null; // Agora uma única instância para o gráfico principal
+
+        // API Key do OpenWeatherMap (Substitua pela sua chave real)
+        const WEATHER_API_KEY = "YOUR_OPENWEATHERMAP_API_KEY"; // Substitua por sua chave real
+        const WEATHER_API_URL = "https://api.openweathermap.org/data/2.5/weather";
+
+        // Obter elementos do DOM
+        const aboutSection = document.getElementById('about');
+        const loginSection = document.getElementById('login');
+        const registerSection = document.getElementById('register');
+        const dashboardSection = document.getElementById('dashboard');
+        const reportsSection = document.getElementById('reports');
+        const profileSection = document.getElementById('profile');
+        
+        const loggedInControls = document.getElementById('logged-in-controls');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const navLinks = document.querySelectorAll('#mobileMenu .nav-link'); // Seleciona apenas links dentro do menu mobile
+        const notificationsBtn = document.getElementById('notificationsBtn');
+        const notificationsDropdown = document.getElementById('notificationsDropdown');
+        // const notificationBadge = document.getElementById('notificationBadge'); // Removido
+        const menuToggle = document.getElementById('menuToggle');
+        const closeMenuBtn = document.getElementById('closeMenu'); // Botão para fechar o menu mobile
+        
+        const goToLoginBtn = document.getElementById('goToLoginBtn');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const registerLink = document.getElementById('registerLink');
+        const backToLoginLink = document.getElementById('backToLoginLink');
+        const logoutBtn = document.getElementById('logoutBtn');
+        
+        const welcomeMessageDisplay = document.getElementById('welcomeMessageDisplay');
+        const weatherInfo = document.getElementById('weatherInfo');
+        const farmMap = document.getElementById('farmMap');
+        
+        const cultivatedAreaInput = document.getElementById('cultivatedArea');
+        const cropTypeSelect = document.getElementById('cropType');
+        const calculateImpactBtn = document.getElementById('calculateImpactBtn');
+        const impactResults = document.getElementById('impactResults');
+        const affectedHectaresSpan = document.getElementById('affectedHectares'); // Novo span
+        const waterSavedSpan = document.getElementById('waterSaved');
+        const wasteReductionSpan = document.getElementById('wasteReduction');
+        const moneySavedSpan = document.getElementById('moneySaved');
+        const impactCalcMessage = document.getElementById('impactCalcMessage'); // Novo elemento para mensagens da calculadora
+        
+        const dailyWaterInput = document.getElementById('dailyWaterInput');
+        const fertilizerUseInput = document.getElementById('fertilizerUseInput');
+        const soilObservationInput = document.getElementById('soilObservationInput');
+        const saveManualDataBtn = document.getElementById('saveManualDataBtn');
+        const manualSaveMessage = document.getElementById('manualSaveMessage');
+        
+        const waterMeterInput = document.getElementById('waterMeterInput');
+        const simulateSensorDataBtn = document.getElementById('simulateSensorDataBtn');
+        const sensorSaveMessage = document.getElementById('sensorSaveMessage');
+        
+        const generatePdfReportBtn = document.getElementById('generatePdfReportBtn');
+        
+        const profileNameInput = document.getElementById('profileNameInput'); // Renomeado para input
+        const profileEmailInput = document.getElementById('profileEmailInput'); // Renomeado para input
+        const profileCooperativeInput = document.getElementById('profileCooperativeInput'); // Renomeado para input
+        const profileFarmDataInput = document.getElementById('profileFarmDataInput'); // Renomeado para input
+        // const profileDarkModeToggle = document.getElementById('profileDarkModeToggle'); // REMOVIDO
+        const headerDarkModeToggle = document.getElementById('headerDarkModeToggle'); // Toggle no header
+        const saveProfileBtn = document.getElementById('saveProfileBtn'); // Botão de salvar perfil
+        
+        const changeProfilePicBtn = document.getElementById('changeProfilePicBtn');
+        const profilePicInput = document.getElementById('profilePicInput');
+        const profilePicImg = document.getElementById('profilePicImg');
+        const profilePicMessage = document.getElementById('profilePicMessage');
+
+        const locationPermissionPopup = document.getElementById('locationPermissionPopup');
+        const allowLocationBtn = document.getElementById('allowLocationBtn');
+        const denyLocationBtn = document.getElementById('denyLocationBtn');
+        const locationMessage = document.getElementById('locationMessage');
+
+        // Função para exibir mensagens
+        function showMessage(element, message, type = 'info') {
+            if (!element) return;
+            element.textContent = message;
+            element.className = `message-box ${type} visible`; // Adiciona 'visible' para animação
+            element.classList.remove('hidden');
+            setTimeout(() => {
+                element.classList.remove('visible'); // Inicia a transição para esconder
+                setTimeout(() => {
+                    element.classList.add('hidden'); // Esconde após a transição
+                }, 300); // Tempo da transição
+            }, 5000);
+        }
+
+        // Função para alternar seções
+        function showSection(sectionId) {
+            const sections = [aboutSection, loginSection, registerSection, dashboardSection, reportsSection, profileSection];
+            sections.forEach(section => {
+                if (section && section.id === sectionId) {
+                    section.classList.remove('hidden');
+                } else if (section) {
+                    section.classList.add('hidden');
+                }
+            });
+            // Esconder menu mobile ao navegar
+            if (mobileMenu) {
+                mobileMenu.classList.remove('active');
+            }
+
+            // Atualizar estado ativo dos links de navegação
+            navLinks.forEach(link => {
+                if (link.dataset.target === sectionId) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        }
+
+        // Função para verificar o estado de login
+        function checkLoginState() {
+            if (loggedInUserEmail && users[loggedInUserEmail]) {
+                currentUser = users[loggedInUserEmail];
+                if (welcomeMessageDisplay) welcomeMessageDisplay.textContent = `Bem-vindo(a), ${currentUser.name || currentUser.email}!`;
+                showSection('dashboard');
+                loggedInControls.classList.remove('hidden'); // Mostrar controles após login
+                checkLocationPermission();
+            } else {
+                // Se não estiver logado, mostra a tela "Sobre o Projeto"
+                showSection('about');
+                loggedInControls.classList.add('hidden'); // Esconder controles antes do login
+            }
+        }
+
+        // Função para lidar com o login
+        if (loginForm) {
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const email = e.target.email.value;
+                const password = e.target.password.value;
+
+                if (users[email] && users[email].password === password) {
+                    currentUser = users[email];
+                    localStorage.setItem('loggedInUserEmail', email);
+                    showMessage(document.getElementById('loginMessage'), 'Login bem-sucedido!', 'success');
+                    if (welcomeMessageDisplay) welcomeMessageDisplay.textContent = `Bem-vindo(a), ${currentUser.name || currentUser.email}!`;
+                    loggedInControls.classList.remove('hidden'); // Mostrar controles após login
+                    showSection('dashboard');
+                    checkLocationPermission(); // Check location after successful login
+                } else {
+                    showMessage(document.getElementById('loginMessage'), 'E-mail ou senha inválidos.', 'error');
+                }
+            });
+        }
+
+        // Função para lidar com o cadastro
+        if (registerForm) {
+            registerForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const name = e.target.registerName.value;
+                const email = e.target.registerEmail.value;
+                const password = e.target.registerPassword.value;
+                const confirmPassword = e.target.confirmPassword.value;
+                const cooperative = e.target.registerCooperative.value;
+                const farmData = e.target.registerFarmData.value;
+
+                if (password !== confirmPassword) {
+                    showMessage(document.getElementById('registerMessage'), 'As senhas não coincidem.', 'error');
+                    return;
+                }
+
+                if (users[email]) {
+                    showMessage(document.getElementById('registerMessage'), 'Este e-mail já está cadastrado.', 'error');
+                    return;
+                }
+
+                users[email] = { name, email, password, cooperative, farmData, profilePic: "https://placehold.co/150x150/a7f3d0/065f46?text=Foto" }; // Adiciona foto padrão
+                localStorage.setItem('users', JSON.stringify(users));
+                showMessage(document.getElementById('registerMessage'), 'Cadastro realizado com sucesso! Faça login.', 'success');
+                e.target.reset(); // Limpa o formulário
+                showSection('login');
+            });
+        }
+
+        // Eventos de navegação
+        if (goToLoginBtn) goToLoginBtn.addEventListener('click', () => showSection('login'));
+        if (registerLink) registerLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            showSection('register');
+        });
+        if (backToLoginLink) backToLoginLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            showSection('login');
+        });
+        if (logoutBtn) logoutBtn.addEventListener('click', () => {
+            currentUser = null;
+            localStorage.removeItem('loggedInUserEmail');
+            loggedInControls.classList.add('hidden'); // Esconder controles ao deslogar
+            showSection('about'); // Volta para a tela "Sobre o Projeto" ao deslogar
+        });
+
+        // Navegação do menu mobile (agora principal)
+        if (menuToggle && mobileMenu) {
+            menuToggle.addEventListener('click', () => {
+                mobileMenu.classList.add('active'); // Mostra o menu
+            });
+        }
+        if (closeMenuBtn && mobileMenu) {
+            closeMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.remove('active'); // Esconde o menu
+            });
+        }
+
+        if (navLinks) {
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const target = e.target.dataset.target;
+                    if (currentUser) {
+                        showSection(target);
+                        if (target === 'profile') {
+                            loadProfileData();
+                        }
+                        if (target === 'reports') {
+                            initChart('pie'); // Inicializa o gráfico de pizza por padrão ao entrar em relatórios
+                        }
+                    } else {
+                        showMessage(document.getElementById('loginMessage'), 'Por favor, faça login para acessar esta seção.', 'info');
+                        showSection('login');
+                    }
+                });
+            });
+        }
+
+        // Notificações
+        if (notificationsBtn && notificationsDropdown) { // Removido notificationBadge do if
+            notificationsBtn.addEventListener('click', () => {
+                notificationsDropdown.classList.toggle('hidden');
+                notificationsDropdown.classList.toggle('scale-95');
+                notificationsDropdown.classList.toggle('opacity-0');
+                notificationsDropdown.classList.toggle('scale-100');
+                notificationsDropdown.classList.toggle('opacity-100');
+                // Não há badge para resetar
+            });
+        }
+
+        // Fechar dropdown de notificação e menu mobile ao clicar fora
+        document.addEventListener('click', (e) => {
+            if (notificationsBtn && notificationsDropdown && !notificationsBtn.contains(e.target) && !notificationsDropdown.contains(e.target)) {
+                notificationsDropdown.classList.add('hidden');
+                notificationsDropdown.classList.remove('scale-100', 'opacity-100');
+                notificationsDropdown.classList.add('scale-95', 'opacity-0');
+            }
+            if (menuToggle && mobileMenu && !menuToggle.contains(e.target) && !mobileMenu.contains(e.target) && !e.target.closest('#mobileMenu')) {
+                mobileMenu.classList.remove('active');
+            }
+        });
+
+        // Calculadora de Impacto
+        if (calculateImpactBtn && impactResults) {
+            calculateImpactBtn.addEventListener('click', () => {
+                const area = parseFloat(cultivatedAreaInput.value);
+                const crop = cropTypeSelect.value;
+
+                // A validação já impede números negativos e zero, mas o min="0" no HTML ajuda na UX
+                if (isNaN(area) || area <= 0) {
+                    showMessage(impactCalcMessage, 'Por favor, insira uma área cultivada válida (maior que 0).', 'error');
+                    // Reset results if input is invalid
+                    affectedHectaresSpan.textContent = '0';
+                    waterSavedSpan.textContent = '0';
+                    wasteReductionSpan.textContent = '0';
+                    moneySavedSpan.textContent = '0';
+                    return;
+                }
+
+                let waterSaved = 0;
+                let wasteReduction = 0;
+                let moneySaved = 0;
+
+                // Simulação de cálculo de impacto baseada na cultura e área
+                switch (crop) {
+                    case 'feijao':
+                        waterSaved = area * 500; // litros/ano por hectare
+                        wasteReduction = 0.05; // 5% de redução
+                        moneySaved = area * 150; // R$/ano por hectare
+                        break;
+                    case 'arroz':
+                        waterSaved = area * 1200;
+                        wasteReduction = 0.08;
+                        moneySaved = area * 250;
+                        break;
+                    case 'cana':
+                        waterSaved = area * 800;
+                        wasteReduction = 0.03;
+                        moneySaved = area * 100;
+                        break;
+                    case 'outro': // Valor padrão para "Outro"
+                        waterSaved = area * 400;
+                        wasteReduction = 0.04;
+                        moneySaved = area * 120;
+                        break;
+                    default:
+                        waterSaved = area * 300;
+                        wasteReduction = 0.02;
+                        moneySaved = area * 80;
+                        break;
+                }
+
+                if (affectedHectaresSpan) affectedHectaresSpan.textContent = area.toFixed(2); // Atualiza hectares afetados
+                if (waterSavedSpan) waterSavedSpan.textContent = waterSaved.toFixed(0);
+                if (wasteReductionSpan) wasteReductionSpan.textContent = (wasteReduction * 100).toFixed(1);
+                if (moneySavedSpan) moneySavedSpan.textContent = moneySaved.toFixed(2);
+                
+                // Ensure results are visible and apply animation
+                impactResults.classList.add('impact-results-visible'); 
+                showMessage(impactCalcMessage, 'Impacto calculado com sucesso!', 'success'); // Usa o novo elemento para a mensagem
+            });
+        }
+
+        // Coleta de Dados Manuais
+        if (saveManualDataBtn && manualSaveMessage) {
+            saveManualDataBtn.addEventListener('click', () => {
+                const dailyWater = dailyWaterInput.value;
+                const fertilizerUse = fertilizerUseInput.value;
+                const soilObservation = soilObservationInput.value;
+
+                if (!dailyWater || !fertilizerUse || !soilObservation) {
+                    showMessage(manualSaveMessage, 'Por favor, preencha todos os campos de dados manuais.', 'error');
+                    return;
+                }
+
+                // Simulação de salvamento de dados
+                console.log('Dados Manuais Salvos:', { dailyWater, fertilizerUse, soilObservation });
+                showMessage(manualSaveMessage, 'Dados salvos com sucesso!', 'success');
+                // Limpar campos
+                dailyWaterInput.value = '';
+                fertilizerUseInput.value = '';
+                soilObservationInput.value = '';
+            });
+        }
+
+        // Simulação de Dados de Sensor
+        if (simulateSensorDataBtn && sensorSaveMessage) {
+            simulateSensorDataBtn.addEventListener('click', () => {
+                const waterReading = parseFloat(waterMeterInput.value);
+
+                if (isNaN(waterReading) || waterReading < 0) {
+                    showMessage(sensorSaveMessage, 'Por favor, insira uma leitura de medidor de água válida.', 'error');
+                    return;
+                }
+
+                // Simulação de salvamento de dados do sensor
+                console.log('Leitura do Sensor Salva:', { waterReading });
+                showMessage(sensorSaveMessage, 'Leitura do sensor simulada e salva!', 'success');
+                // Limpar campo
+                waterMeterInput.value = '';
+            });
+        }
+
+        // Geração de Relatório PDF
+        if (generatePdfReportBtn) {
+            generatePdfReportBtn.addEventListener('click', () => {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                doc.setFontSize(22);
+                doc.text("Relatório de Sustentabilidade - Sustenta Pitanga", 10, 20);
+                doc.setFontSize(12);
+                doc.text(`Gerado em: ${new Date().toLocaleDateString()}`, 10, 30);
+                doc.text(`Usuário: ${currentUser ? currentUser.name : 'Convidado'}`, 10, 40);
+
+                let y = 60;
+
+                // Adicionar dados do dashboard
+                doc.setFontSize(16);
+                doc.text("Resumo do Dashboard", 10, y);
+                y += 10;
+                doc.setFontSize(12);
+                doc.text(`Desperdício por Hectare: ${document.querySelector('#dashboard .card:nth-child(2) .text-4xl').textContent}`, 10, y);
+                y += 7;
+                doc.text(`Adubos Utilizados: ${document.querySelector('#dashboard .card:nth-child(3) .text-4xl').textContent}`, 10, y);
+                y += 7;
+                doc.text(`Clima Atual: ${weatherInfo.textContent.trim()}`, 10, y);
+                y += 15;
+
+                // Adicionar gráfico principal como imagem
+                const canvas = document.getElementById('myChart');
+                if (canvas) {
+                    const imgData = canvas.toDataURL('image/png');
+                    doc.text("Desperdício vs. Uso Eficiente", 10, y);
+                    y += 5;
+                    doc.addImage(imgData, 'PNG', 10, y, 180, 90); // Ajuste as dimensões conforme necessário
+                    y += 100;
+                }
+
+                doc.save('relatorio_sustenta_pitanga.pdf');
+                showMessage(document.querySelector('#reports .card .text-center'), 'Relatório PDF gerado com sucesso!', 'success');
+            });
+        }
+
+        // Função para renderizar gráfico (agora uma única função para o gráfico principal)
+        function initChart(chartType = 'pie') {
+            const ctx = document.getElementById('myChart');
+
+            if (myChartInstance) {
+                myChartInstance.destroy();
+            }
+
+            let chartConfig = {};
+            const data = {
+                labels: ['Desperdício Atual (15%)', 'Uso Eficiente (85%)'],
+                datasets: [{
+                    data: [15, 85],
+                    backgroundColor: [
+                        '#ef4444', /* Vermelho para desperdício */
+                        '#22c55e'  /* Verde para eficiente */
+                    ],
+                    borderColor: document.body.classList.contains('dark-mode') ? '#2d3748' : '#ffffff', /* Borda adapta ao tema */
+                    borderWidth: 2,
+                }]
+            };
+
+            const barData = {
+                labels: ['Desperdício', 'Uso Eficiente'],
+                datasets: [{
+                    label: 'Percentual',
+                    data: [15, 85],
+                    backgroundColor: [
+                        '#ef4444',
+                        '#22c55e'
+                    ],
+                    borderColor: document.body.classList.contains('dark-mode') ? '#2d3748' : '#ffffff',
+                    borderWidth: 1,
+                }]
+            };
+
+            const lineData = {
+                labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+                datasets: [{
+                    label: 'Desperdício Mensal (%)',
+                    data: [20, 18, 15, 12, 10, 8],
+                    borderColor: document.body.classList.contains('dark-mode') ? '#63b3ed' : '#3b82f6', /* Azul adapta ao tema */
+                    backgroundColor: document.body.classList.contains('dark-mode') ? 'rgba(99, 179, 237, 0.2)' : 'rgba(59, 130, 246, 0.2)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            };
+
+            const radarData = {
+                labels: ['Desperdício', 'Adubos', 'Água', 'Solo'],
+                datasets: [{
+                    label: 'Métricas',
+                    data: [15, 80, 70, 85],
+                    backgroundColor: document.body.classList.contains('dark-mode') ? 'rgba(183, 148, 244, 0.2)' : 'rgba(139, 92, 246, 0.2)', /* Roxo adapta ao tema */
+                    borderColor: document.body.classList.contains('dark-mode') ? '#b794f4' : '#805ad5',
+                    borderWidth: 1,
+                    pointBackgroundColor: document.body.classList.contains('dark-mode') ? '#b794f4' : '#805ad5',
+                    pointBorderColor: document.body.classList.contains('dark-mode') ? '#2d3748' : '#fff',
+                    pointHoverBackgroundColor: document.body.classList.contains('dark-mode') ? '#2d3748' : '#fff',
+                    pointHoverBorderColor: document.body.classList.contains('dark-mode') ? '#b794f4' : '#805ad5'
+                }]
+            };
+
+            const chartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            color: document.body.classList.contains('dark-mode') ? '#e2e8f0' : '#333' // Cor da legenda
+                        }
+                    },
+                    title: {
+                        display: false,
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            color: document.body.classList.contains('dark-mode') ? '#e2e8f0' : '#333' // Cor dos ticks do eixo X
+                        },
+                        grid: {
+                            color: document.body.classList.contains('dark-mode') ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)' // Cor da grade do eixo X
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            color: document.body.classList.contains('dark-mode') ? '#e2e8f0' : '#333' // Cor dos ticks do eixo Y
+                        },
+                        grid: {
+                            color: document.body.classList.contains('dark-mode') ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)' // Cor da grade do eixo Y
+                        },
+                        beginAtZero: true,
+                        max: 100 // Para gráficos de barra e radar que representam percentuais/pontuações
+                    }
+                }
+            };
+
+            switch (chartType) {
+                case 'pie':
+                case 'doughnut':
+                    chartConfig = {
+                        type: chartType,
+                        data: data,
+                        options: {
+                            ...chartOptions,
+                            scales: {} // Pie/Doughnut não usam escalas x/y
+                        }
+                    };
+                    break;
+                case 'bar-column':
+                    chartConfig = {
+                        type: 'bar',
+                        data: barData,
+                        options: {
+                            ...chartOptions,
+                            indexAxis: 'x',
+                            plugins: {
+                                ...chartOptions.plugins,
+                                legend: { display: false }
+                            },
+                        }
+                    };
+                    break;
+                case 'bar-horizontal':
+                    chartConfig = {
+                        type: 'bar',
+                        data: barData,
+                        options: {
+                            ...chartOptions,
+                            indexAxis: 'y',
+                            plugins: {
+                                ...chartOptions.plugins,
+                                legend: { display: false }
+                            },
+                        }
+                    };
+                    break;
+                case 'line':
+                    chartConfig = {
+                        type: 'line',
+                        data: lineData,
+                        options: {
+                            ...chartOptions,
+                            scales: {
+                                ...chartOptions.scales,
+                                y: {
+                                    ...chartOptions.scales.y,
+                                    max: 25 // Ajuste para o range do desperdício mensal
+                                }
+                            }
+                        }
+                    };
+                    break;
+                case 'radar':
+                    chartConfig = {
+                        type: 'radar',
+                        data: radarData,
+                        options: {
+                            ...chartOptions,
+                            scales: {
+                                r: {
+                                    angleLines: {
+                                        display: false
+                                    },
+                                    suggestedMin: 0,
+                                    suggestedMax: 100,
+                                    ticks: {
+                                        color: document.body.classList.contains('dark-mode') ? '#e2e8f0' : '#333'
+                                    },
+                                    pointLabels: {
+                                        color: document.body.classList.contains('dark-mode') ? '#e2e8f0' : '#333'
+                                    },
+                                    grid: {
+                                        color: document.body.classList.contains('dark-mode') ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
+                                    }
+                                }
+                            }
+                        }
+                    };
+                    break;
+                default:
+                    chartConfig = {
+                        type: 'pie',
+                        data: data,
+                        options: {
+                            ...chartOptions,
+                            scales: {}
+                        }
+                    };
+                    break;
+            }
+
+            myChartInstance = new Chart(ctx, chartConfig);
+        }
+
+        // Event listeners para botões de tipo de gráfico
+        document.querySelectorAll('#chartTypeButtons .chart-type-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const chartType = this.dataset.chartType;
+
+                document.querySelectorAll('#chartTypeButtons .chart-type-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                this.classList.add('active');
+
+                initChart(chartType);
+            });
+        });
+
+        // Atualizar seção de perfil
+        function loadProfileData() {
+            if (currentUser) {
+                profileNameInput.value = currentUser.name || '';
+                profileEmailInput.value = currentUser.email || '';
+                profileCooperativeInput.value = currentUser.cooperative || '';
+                profileFarmDataInput.value = currentUser.farmData || '';
+                profilePicImg.src = currentUser.profilePic || "https://placehold.co/150x150/a7f3d0/065f46?text=Foto";
+            }
+        }
+
+        // Função para salvar dados do perfil
+        if (saveProfileBtn) {
+            saveProfileBtn.addEventListener('click', () => {
+                if (currentUser) {
+                    currentUser.name = profileNameInput.value;
+                    currentUser.cooperative = profileCooperativeInput.value;
+                    currentUser.farmData = profileFarmDataInput.value;
+                    currentUser.profilePic = profilePicImg.src; // Salva a URL da imagem
+                    users[currentUser.email] = currentUser; // Atualiza no objeto users
+                    localStorage.setItem('users', JSON.stringify(users)); // Salva no localStorage
+                    showMessage(document.getElementById('profilePicMessage'), 'Dados do perfil atualizados com sucesso!', 'success');
+                }
+            });
+        }
+
+        // Função para alternar o modo escuro
+        function toggleDarkMode() {
+            const isDarkMode = document.body.classList.toggle('dark-mode');
+            
+            // Atualiza o localStorage
+            if (isDarkMode) {
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                localStorage.removeItem('darkMode');
+            }
+
+            // Atualiza o estado do toggle no header
+            if (headerDarkModeToggle) headerDarkModeToggle.innerHTML = `<i class="fas fa-${isDarkMode ? 'sun' : 'moon'}"></i>`;
+
+            // Re-renderizar gráfico principal para atualizar cores
+            if (myChartInstance) {
+                initChart(myChartInstance.config.type);
+            }
+        }
+
+        // Event listeners para o toggle de modo escuro do header
+        if (headerDarkModeToggle) {
+            headerDarkModeToggle.addEventListener('click', toggleDarkMode);
+        }
+
+        // Aplicar modo escuro ao carregar
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+            if (headerDarkModeToggle) headerDarkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        } else {
+            if (headerDarkModeToggle) headerDarkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+        }
+
+        // --- Lógica do Popup de Permissão de Localização ---
+        function checkLocationPermission() {
+            const locationPermissionStatus = localStorage.getItem('locationPermission');
+
+            if (locationPermissionStatus === 'granted') {
+                getLocation();
+                if (locationPermissionPopup) locationPermissionPopup.classList.remove('visible'); // Garante que o popup esteja escondido
+            } else if (locationPermissionStatus === 'denied') {
+                if (locationPermissionPopup) locationPermissionPopup.classList.remove('visible');
+                if (weatherInfo) showMessage(weatherInfo, 'Permissão de localização negada. O clima e o mapa podem não ser exibidos corretamente.', 'error');
+                if (farmMap) farmMap.innerHTML = '<p class="text-gray-500">Mapa não disponível sem permissão de localização.</p>';
+            } else {
+                if (locationPermissionPopup) locationPermissionPopup.classList.add('visible');
+            }
+        }
+
+        if (allowLocationBtn) {
+            allowLocationBtn.addEventListener('click', () => {
+                getLocation();
+                if (locationPermissionPopup) locationPermissionPopup.classList.remove('visible'); // Esconde o popup imediatamente
+                localStorage.setItem('locationPermission', 'granted'); // Salva o status da permissão
+            });
+        }
+
+        if (denyLocationBtn) {
+            denyLocationBtn.addEventListener('click', () => {
+                if (locationPermissionPopup) locationPermissionPopup.classList.remove('visible'); // Esconde o popup
+                localStorage.setItem('locationPermission', 'denied'); // Salva o status da permissão
+                if (locationMessage) showMessage(locationMessage, 'Permissão de localização negada. O clima e o mapa podem não ser exibidos corretamente.', 'error');
+                if (weatherInfo) weatherInfo.innerHTML = '<p class="text-lg">Localização negada. Não foi possível obter o clima.</p>';
+                if (farmMap) farmMap.innerHTML = '<p class="text-gray-500">Mapa não disponível devido a erro de localização.</p>';
+            });
+        }
+
+        async function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    async (position) => {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        
+                        // Exibir clima usando OpenWeatherMap API
+                        if (WEATHER_API_KEY && WEATHER_API_KEY !== "YOUR_OPENWEATHERMAP_API_KEY") {
+                            try {
+                                const response = await fetch(`${WEATHER_API_URL}?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}&units=metric&lang=pt_br`);
+                                const data = await response.json();
+                                if (data && data.main && weatherInfo) {
+                                    weatherInfo.innerHTML = `
+                                        <p class="text-lg"><i class="fas fa-cloud-sun mr-2"></i>${data.main.temp}°C, ${data.weather[0].description}</p>
+                                        <p class="text-sm">Umidade: ${data.main.humidity}%, Vento: ${data.wind.speed} m/s</p>
+                                        <p class="text-xs">Lat: ${lat.toFixed(2)}, Lon: ${lon.toFixed(2)}</p>
+                                    `;
+                                } else {
+                                    if (weatherInfo) weatherInfo.innerHTML = '<p class="text-lg">Não foi possível obter os dados climáticos.</p>';
+                                }
+                            } catch (error) {
+                                console.error("Erro ao buscar dados climáticos:", error);
+                                if (weatherInfo) weatherInfo.innerHTML = '<p class="text-lg">Erro ao obter o clima.</p>';
+                            }
+                        } else {
+                            // Exibir clima simulado se a API Key não estiver configurada
+                            if (weatherInfo) {
+                                weatherInfo.innerHTML = `
+                                    <p class="text-lg"><i class="fas fa-cloud-sun mr-2"></i>25°C, Ensolarado</p>
+                                    <p class="text-sm">Umidade: 60%, Vento: 10 km/h</p>
+                                    <p class="text-xs">Lat: ${lat.toFixed(2)}, Lon: ${lon.toFixed(2)}</p>
+                                `;
+                            }
+                        }
+                        if (locationMessage) showMessage(locationMessage, 'Localização obtida com sucesso!', 'success');
+
+                        // Carregar mapa (simulado com OpenStreetMap)
+                        if (farmMap) {
+                            farmMap.innerHTML = `
+                                <iframe 
+                                    width="100%" 
+                                    height="100%" 
+                                    frameborder="0" 
+                                    scrolling="no" 
+                                    marginheight="0" 
+                                    marginwidth="0" 
+                                    src="https://www.openstreetmap.org/export/embed.html?bbox=${lon - 0.01},${lat - 0.005},${lon + 0.01},${lat + 0.005}&amp;layer=mapnik&amp;marker=${lat},${lon}" 
+                                    style="border: 1px solid var(--input-border); border-radius: 0.5rem;">
+                                </iframe>
+                                <small class="mt-2 block"><a href="https://www.openstreetmap.org/#map=16/${lat}/${lon}" class="text-blue-500 hover:underline" target="_blank">Ver Mapa Maior</a></small>
+                            `;
+                        }
+                    }, 
+                    showError
+                );
+            } else {
+                if (locationMessage) showMessage(locationMessage, 'Geolocalização não é suportada por este navegador.', 'error');
+                if (weatherInfo) weatherInfo.innerHTML = '<p class="text-lg">Geolocalização não suportada.</p>';
+                if (farmMap) farmMap.innerHTML = '<p class="text-gray-500">Mapa não disponível.</p>';
+            }
+        }
+
+        function showError(error) {
+            let errorMessage = '';
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    errorMessage = 'Usuário negou a requisição de Geolocalização.';
+                    localStorage.setItem('locationPermission', 'denied'); // Salva o status de negado
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    errorMessage = 'Informação de localização indisponível.';
+                    break;
+                case error.TIMEOUT:
+                    errorMessage = 'A requisição para obter a localização expirou.';
+                    break;
+                case error.UNKNOWN_ERROR:
+                    errorMessage = 'Um erro desconhecido ocorreu.';
+                    break;
+            }
+            if (locationMessage) showMessage(locationMessage, `Erro de Geolocalização: ${errorMessage}`, 'error');
+            if (weatherInfo) weatherInfo.innerHTML = `<p class="text-lg">Erro ao obter o clima: ${errorMessage}</p>`;
+            if (farmMap) farmMap.innerHTML = '<p class="text-gray-500">Mapa não disponível devido a erro de localização.</p>';
+            if (locationPermissionPopup) locationPermissionPopup.classList.remove('visible'); // Esconde o popup em caso de erro
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            checkLoginState();
+        });
+    </script>
+</body>
+</html>
