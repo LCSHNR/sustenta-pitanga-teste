@@ -86,15 +86,19 @@ body.dark-mode {
     --chart-btn-active-border: #38a169;
     --popup-bg: #2d3748;
     --popup-text: #e2e8f0;
-    --message-box-info-bg: #2b6cb0;
-    --message-box-info-border: #4299e1;
-    --message-box-info-text: #e0e0e0;
-    --message-box-success-bg: #2f855a;
-    --message-box-success-border: #48bb78;
-    --message-box-success-text: #e0e0e0;
-    --message-box-error-bg: #c53030;
-    --message-box-error-border: #e53e3e;
-    --message-box-error-text: #e0e0e0;
+    /* Cores das mensagens de notificação no modo escuro (fundos claros, texto escuro) */
+    --message-box-info-bg: #bfdbfe;
+    --message-box-info-border: #60a5fa;
+    --message-box-info-text: #1a202c;
+
+    --message-box-success-bg: #d1fae5;
+    --message-box-success-border: #34d399;
+    --message-box-success-text: #1a202c;
+
+    --message-box-error-bg: #fee2e2;
+    --message-box-error-border: #ef4444;
+    --message-box-error-text: #1a202c;
+
     --input-bg: #4a5568;
     --input-text: #e2e8f0;
     --input-border: #616e7f;
@@ -102,15 +106,15 @@ body.dark-mode {
     --link-hover: #4299e1;
     --mobile-menu-bg: #2d3748;
     --mobile-menu-border: #4a5568;
-    --mobile-menu-link-text: #e2e8f0;
-    --mobile-menu-link-hover: #4a5568;
+    --mobile-menu-link-text: #e2e8f0; /* Cor do texto dos links no menu mobile escuro */
+    --mobile-menu-link-hover: #4a5568; /* Fundo do hover dos links no menu mobile escuro */
     --footer-bg: #1a202c;
     --footer-text: #ffffff;
     /* Cores para adaptação de texto e fundos específicos no modo escuro */
-    --text-gray-700-color: #a0aec0;
-    --text-gray-600-color: #a0aec0;
+    --text-gray-700-color: #cbd5e0; /* Mais claro para melhor contraste */
+    --text-gray-600-color: #e2e8f0; /* Alterado para maior contraste no modo escuro */
     --text-gray-800-color: #e2e8f0;
-    --text-gray-900-color: #e2e8f0;
+    --text-gray-900-color: #1a202c; /* Alterado para ser escuro no dark mode */
     --green-700-color: #68d391;
     --blue-600-color: #63b3ed;
     --green-600-color: #68d391;
@@ -118,12 +122,18 @@ body.dark-mode {
     --purple-500-color: #b794f4;
     --red-600-color: #fc8181;
     --orange-600-color: #f6ad55;
-    --blue-50-bg: #2a4365;
+    --blue-50-bg: #1c2b3e; /* Cor mais escura para a seção IoT no dark mode */
     --green-50-bg: #2d3748;
     --yellow-50-bg: #2d3748;
     --blue-800-color: #90cdf4;
     --indigo-500-color: #9f7aea;
     --border-gray-200-color: #4a5568;
+    --text-blue-700-color: #90cdf4; /* Adicionado para adaptação do texto azul no dark mode */
+}
+
+/* Regra específica para o texto da seção IoT no modo escuro */
+body.dark-mode #dashboard .card .text-gray-600 {
+    color: var(--text-color) !important; /* Usar a cor de texto geral do dark mode para garantir contraste */
 }
 
 body {
@@ -144,9 +154,15 @@ body {
     padding: 1.5rem;
     transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
     color: var(--text-color); /* Garante que o texto dentro do card seja adaptável */
-    /* Removido position: relative; daqui para evitar conflitos com message-box */
+    position: relative; /* Adicionado para posicionamento absoluto da mensagem interna */
 }
-.btn-primary {
+.btn-primary, .btn-secondary, .btn-danger {
+    /* Adiciona display flex e justify-content center para centralizar conteúdo */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Define uma largura mínima para evitar que o botão diminua */
+    min-width: 150px; /* Ajuste conforme necessário para o maior texto de botão */
     background-color: var(--primary-btn-bg);
     color: white;
     padding: 0.75rem 1.5rem;
@@ -158,6 +174,12 @@ body {
     background-color: var(--primary-btn-hover);
     transform: translateY(-2px);
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+/* Nova regra para o estado :active dos botões primários e secundários para um "clique" mais simples */
+.btn-primary:active, .btn-secondary:active, .btn-danger:active {
+    transform: translateY(0); /* Remove o transform de hover para um clique mais direto */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra menor para indicar pressionado */
+    /* Mantém a cor de hover para feedback visual */
 }
 .btn-secondary {
     background-color: var(--secondary-btn-bg);
@@ -282,7 +304,8 @@ body {
 
 /* Estilo para mensagens de erro/sucesso - Corrigido para não causar desalinhamento */
 .message-box {
-    width: 100%; /* Ocupa a largura total do contêiner pai */
+    width: auto; /* Alterado de 100% para auto */
+    max-width: 90%; /* Adicionado para evitar overflow em telas pequenas */
     padding: 0.75rem 1.25rem;
     border-radius: 0.375rem;
     text-align: center;
@@ -295,7 +318,13 @@ body {
     align-items: center;
     justify-content: center;
     gap: 0.5rem; /* Espaçamento entre ícone e texto */
-    margin-top: 1rem; /* Adiciona margem acima para posicionar abaixo do elemento anterior */
+    
+    /* Posicionamento absoluto para evitar que afete o layout */
+    position: absolute;
+    top: 1rem; /* Posição do topo */
+    left: 50%; /* Centraliza horizontalmente */
+    transform: translateX(-50%); /* Ajuste para centralização perfeita */
+    margin-top: 0; /* Removido, pois o posicionamento é absoluto */
 }
 .message-box.visible {
     opacity: 1;
@@ -305,6 +334,18 @@ body {
 .message-box.error { background-color: var(--message-box-error-bg); border: 1px solid var(--message-box-error-border); color: var(--message-box-error-text); }
 .message-box.info { background-color: var(--message-box-info-bg); border: 1px solid var(--message-box-info-border); color: var(--message-box-info-text); }
 .message-box .message-icon { font-size: 1.2rem; } /* Tamanho do ícone */
+
+/* Nova classe para mensagens que devem aparecer no fluxo normal do documento */
+.message-box-inline {
+    position: relative; /* Permite que margin-top/bottom funcionem corretamente */
+    margin-top: 1rem; /* Espaço abaixo do botão */
+    margin-bottom: 1rem; /* Espaço acima do próximo elemento */
+    width: 100%; /* Ocupa a largura total do pai */
+    left: auto; /* Anula o left de .message-box */
+    top: auto; /* Anula o top de .message-box */
+    transform: none; /* Anula o transform de .message-box */
+}
+
 
 /* Ajustes para elementos de formulário no modo escuro */
 body.dark-mode input,
@@ -428,6 +469,17 @@ input:checked + .slider:before {
     pointer-events: auto; /* Permite cliques */
 }
 
+/* Correção para o contraste dos links de navegação no modo escuro */
+body.dark-mode .nav-link {
+    color: var(--mobile-menu-link-text); /* Garante que o texto seja claro no modo escuro */
+}
+
+body.dark-mode .nav-link:hover {
+    background-color: var(--mobile-menu-link-hover); /* Fundo mais escuro para contraste no hover */
+    color: var(--mobile-menu-link-text); /* Mantém o texto claro no hover */
+}
+
+
 /* Esconder a navegação desktop */
 .header-nav-desktop {
     display: none;
@@ -494,7 +546,47 @@ body.dark-mode #about-us .text-gray-600,
 body.dark-mode #about-us .text-gray-500 {
     color: var(--text-color) !important;
 }
+/* Regra específica para o texto azul-700 no modo escuro */
+body.dark-mode .text-blue-700 {
+    color: var(--text-blue-700-color) !important;
+}
 
+/* Ajustes para o texto na landing page no modo escuro */
+body.dark-mode #landing-page p.text-gray-700 {
+    color: var(--text-color) !important;
+}
+
+/* Ajustes para o texto na seção IoT no dashboard no modo escuro */
+body.dark-mode #dashboard .card p.text-gray-700 {
+    color: var(--text-color) !important;
+}
+
+/* Ajustes para textos gerais dentro de cards no dashboard que possam usar text-gray-600 */
+body.dark-mode #dashboard .card .text-gray-600 {
+    color: var(--text-color) !important;
+}
+
+/* Ajustes para o texto das metas na seção de pontos e resgate no modo escuro */
+body.dark-mode #points-redemption ul.list-disc li,
+body.dark-mode #points-redemption .text-gray-700,
+body.dark-mode #points-redemption .text-gray-600 {
+    color: var(--text-color) !important;
+}
+/* Ajuste para as notificações no modo escuro: texto preto em fundo claro */
+body.dark-mode #notificationsDropdown h4,
+body.dark-mode #notificationsDropdown p,
+body.dark-mode #notificationDropdownList p,
+body.dark-mode #notificationList p {
+    color: #1a202c !important; /* Força o texto a ser preto */
+}
+body.dark-mode .notification-item p.text-xs.text-gray-500 {
+    color: #4a5568 !important; /* Um cinza mais escuro para a data no modo escuro */
+}
+
+/* Ajuste para as datas das notificações no modo escuro */
+body.dark-mode .notification-item .text-xs.text-gray-500 {
+    color: var(--text-color) !important; /* Garante que a data seja clara no dark mode */
+}
 
 /* Estilo para o spinner de carregamento */
 .loading-spinner {
@@ -513,4 +605,80 @@ body.dark-mode #about-us .text-gray-500 {
     to {
         transform: rotate(360deg);
     }
+}
+/* Seu arquivo CSS (ou dentro de um <style> no head) */
+
+#locationPermissionPopup {
+    /* Estilos para posicionamento e sobreposição */
+    z-index: 1000; /* Garante que fique acima de outros elementos */
+    /* Por padrão ele já deve vir com display: none; ou opacity: 0; e pointer-events: none; */
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out;
+}
+
+#locationPermissionPopup.visible {
+    /* Quando a classe 'visible' é adicionada pelo JS */
+    opacity: 1;
+    pointer-events: auto; /* Permite interações com o popup */
+    /* Se você estiver usando TailwindCSS ou classes utilitárias, a classe 'hidden' faria display: none; */
+    /* então a remoção da classe 'hidden' já o tornaria visível */
+}
+
+/* Se você estiver usando Tailwind CSS e a classe 'hidden' é aplicada por padrão,
+   basta garantir que o JS remova 'hidden' e adicione 'visible' para transições.
+   Nesse caso, a propriedade `opacity` pode ser mais para um efeito visual de fade.
+*/
+
+/* Ajustes para alinhar botões na seção de pontos e resgate */
+#points-redemption .grid > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Empurra o botão para baixo */
+}
+#points-redemption .grid > div > div:first-child { /* Conteúdo acima do botão */
+    flex-grow: 1; /* Permite que o conteúdo se expanda */
+    display: flex; /* Para alinhar o texto e a imagem */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+/* Estilo para o container do link "Ver Mapa Maior" */
+.map-link-container {
+    background-color: transparent; /* Garante que o fundo seja transparente */
+}
+
+/* Estilos para o botão "Voltar ao Topo" */
+#backToTopBtn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: var(--primary-btn-bg);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px); /* Começa um pouco abaixo */
+    z-index: 999; /* Garante que fique acima de outros elementos */
+}
+
+#backToTopBtn.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0); /* Desliza para a posição final */
+}
+
+#backToTopBtn:hover {
+    background-color: var(--primary-btn-hover);
+    transform: translateY(-2px); /* Pequeno efeito de elevação no hover */
 }
