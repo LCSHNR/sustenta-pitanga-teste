@@ -60,6 +60,10 @@
     --blue-800-color: #2a4365;
     --indigo-500-color: #667eea;
     --border-gray-200-color: #edf2f7;
+
+    /* Novas variáveis para cores de ícones e texto "Lembrar-me" */
+    --icon-color: #a0aec0; /* Cor padrão para ícones (gray-400) */
+    --remember-me-text-color: #4a5568; /* Cor padrão para "Lembrar-me" (gray-700) */
 }
 
 /* Modo Escuro */
@@ -129,11 +133,10 @@ body.dark-mode {
     --indigo-500-color: #9f7aea;
     --border-gray-200-color: #4a5568;
     --text-blue-700-color: #90cdf4; /* Adicionado para adaptação do texto azul no dark mode */
-}
 
-/* Regra específica para o texto da seção IoT no modo escuro */
-body.dark-mode #dashboard .card .text-gray-600 {
-    color: var(--text-color) !important; /* Usar a cor de texto geral do dark mode para garantir contraste */
+    /* Novas variáveis para cores de ícones e texto "Lembrar-me" no modo escuro */
+    --icon-color: #e2e8f0; /* Ícones brancos no modo escuro */
+    --remember-me-text-color: #e2e8f0; /* Texto "Lembrar-me" branco no modo escuro */
 }
 
 body {
@@ -141,7 +144,19 @@ body {
     background-color: var(--bg-color);
     color: var(--text-color); /* Usa a variável de cor de texto padrão */
     transition: background-color 0.3s ease, color 0.3s ease;
+    /* Adicionado para o fundo da página de login */
+    background-image: url(imagens/imagem\ de\ fundo.jpeg); /* Caminho da imagem corrigido */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* Mantém a imagem fixa ao rolar */
 }
+
+/* Garante que o fundo não seja aplicado quando o modo escuro está ativo */
+body.dark-mode {
+    background-image: none; /* Remove a imagem de fundo no modo escuro */
+    background-color: var(--bg-color); /* Volta para a cor de fundo do modo escuro */
+}
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -156,6 +171,22 @@ body {
     color: var(--text-color); /* Garante que o texto dentro do card seja adaptável */
     position: relative; /* Adicionado para posicionamento absoluto da mensagem interna */
 }
+
+/* Estilo específico para o cartão de login para o efeito fosco */
+#login .card {
+    background-color: rgba(255, 255, 255, 0.6); /* Fundo semi-transparente para o efeito fosco */
+    backdrop-filter: blur(8px); /* Efeito de desfoque */
+    -webkit-backdrop-filter: blur(8px); /* Compatibilidade com navegadores WebKit */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Borda sutil */
+}
+
+/* Ajuste para o modo escuro do cartão de login */
+body.dark-mode #login .card {
+    background-color: rgba(45, 55, 72, 0.6); /* Fundo semi-transparente no modo escuro */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
 .btn-primary, .btn-secondary, .btn-danger {
     /* Adiciona display flex e justify-content center para centralizar conteúdo */
     display: flex;
@@ -625,11 +656,6 @@ body.dark-mode .notification-item .text-xs.text-gray-500 {
     /* então a remoção da classe 'hidden' já o tornaria visível */
 }
 
-/* Se você estiver usando Tailwind CSS e a classe 'hidden' é aplicada por padrão,
-   basta garantir que o JS remova 'hidden' e adicione 'visible' para transições.
-   Nesse caso, a propriedade `opacity` pode ser mais para um efeito visual de fade.
-*/
-
 /* Ajustes para alinhar botões na seção de pontos e resgate */
 #points-redemption .grid > div {
     display: flex;
@@ -681,4 +707,38 @@ body.dark-mode .notification-item .text-xs.text-gray-500 {
 #backToTopBtn:hover {
     background-color: var(--primary-btn-hover);
     transform: translateY(-2px); /* Pequeno efeito de elevação no hover */
+}
+
+/* Estilos para os ícones dinâmicos no formulário de login */
+.dynamic-icon-color {
+    color: var(--icon-color);
+    transition: color 0.3s ease;
+}
+
+/* Estilos para o texto "Lembrar-me" dinâmico */
+.dynamic-remember-me-text {
+    color: var(--remember-me-text-color);
+    transition: color 0.3s ease;
+}
+
+/* Animação para o botão de mostrar/esconder senha */
+.toggle-password-icon.animate {
+    animation: toggleIconAnimation 0.3s ease-out; /* Alterado para ease-out para mais fluidez */
+}
+
+@keyframes toggleIconAnimation {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(0.95); opacity: 0.7; } /* Levemente menor e mais transparente */
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Animação para o checkbox "Lembrar-me" */
+.remember-me-checkbox.animate {
+    animation: checkboxSmoothClick 0.3s ease-out; /* Alterado para ease-out para mais fluidez */
+}
+
+@keyframes checkboxSmoothClick {
+    0% { transform: scale(1); box-shadow: 0 0 0 rgba(0,0,0,0); }
+    50% { transform: scale(0.95); box-shadow: 0 0 8px rgba(59, 130, 246, 0.5); } /* Levemente menor e sombra suave */
+    100% { transform: scale(1); box-shadow: 0 0 0 rgba(0,0,0,0); }
 }
