@@ -221,6 +221,13 @@ function showSection(sectionId, pushState = true) {
         }
     });
 
+    // Adiciona ou remove a classe 'login-background' do body
+    if (sectionId === 'login' || sectionId === 'register') {
+        document.body.classList.add('login-background');
+    } else {
+        document.body.classList.remove('login-background');
+    }
+
     // Esconder menu mobile ao navegar
     if (mobileMenu) {
         mobileMenu.classList.remove('active');
